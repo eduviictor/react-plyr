@@ -26,7 +26,7 @@ class Plyr extends Component {
 
   // Specifies the default values for props:
   static defaultProps = {
-    provider: 'youtube',
+    provider: 'html5',
     videoId: null,
     url: null,
     tracks: [],
@@ -75,6 +75,7 @@ class Plyr extends Component {
     onCaptionsDisabled: PropTypes.func,
 
     // plyr props
+    enterfullscreen: PropTypes.bool,
     enabled: PropTypes.bool,
     title: PropTypes.string,
     debug: PropTypes.bool,
@@ -299,7 +300,18 @@ class Plyr extends Component {
     if (prevProps.muted !== this.props.muted) {
       this.player.muted = this.props.muted;
     }
+    if(prevProps.enterfullscreen !== this.props.enterfullscreen && this.props.enterfullscreen !== false) {
+      this.player.fullscreen.enter();
+      console.log(this.player);
+    } else if (prevProps.enterfullscreen !== this.props.enterfullscreen && this.props.enterfullscreen === false) {
+      this.player.fullscreen.exit();
+    }
 
+    if(prevProps.autoplay !== this.props.autoplay && this.props.autoplay === true) {
+      this.play();
+    } else if(prevProps.autoplay !== this.props.autoplay && this.props.autoplay === false) {
+      this.pause();
+    }
     if (prevProps.videoId !== this.props.videoId) {
       this.props.videoId &&
         this.updateVideoSource(this.props.videoId, this.props.provider);
